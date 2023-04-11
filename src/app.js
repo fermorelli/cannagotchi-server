@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(cors(corsOptions));
 
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Access-Control-Allow-Origin', 'Content-Type');
   next();
 });
 
