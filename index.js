@@ -1,5 +1,5 @@
 import mongoose, { mongo } from 'mongoose';
-import app from './app.js';
+import app from './src/app.js';
 
 mongoose.connect("mongodb+srv://ilcosme:35293fcm@crud.pkoeg6y.mongodb.net/crud", (error) => {
   const port = 8080;
