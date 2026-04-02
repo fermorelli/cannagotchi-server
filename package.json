@@ -1,20 +1,21 @@
 {
-  "name": "server",
-  "version": "1.0.0",
-  "description": "crud server",
-  "main": "server.jsx",
+  "name": "cannagotchi-server",
+  "version": "1.1.0",
+  "description": "Cannagotchi API",
+  "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "dev": "node --watch index.js",
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": "^20.0.0 || ^22.0.0 || ^24.0.0"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.18.1",
-    "mongoose": "^6.6.5",
-    "nodemon": "^2.0.20",
-    "uuid": "^9.0.0"
+    "mongoose": "^6.6.5"
   }
 }

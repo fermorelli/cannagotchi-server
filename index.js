@@ -1,19 +1,59 @@
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
 import app from './src/app.js';
+import { env } from './src/config/env.js';
 
-mongoose.connect("mongodb+srv://ilcosme:35293fcm@crud.pkoeg6y.mongodb.net/crud", (error) => {
-  const port = 8080;
-    if (error) {
-      console.log('Fail to connect', error);
-    } else {
-      console.log('Connected to database');
-      app.listen(port, () => {
-        console.log(`Example app listening on port ${port}`);
-      });
+let server;
+
+const startServer = async () => {
+    try {
+        await mongoose.connect(env.mongoUri);
+        console.log('Connected to database');
+
+        server = app.listen(env.port, () => {
+            console.log(`Cannagotchi API listening on port ${env.port}`);
+        });
+    } catch (error) {
+        console.error('Failed to start server:', error.message);
+        process.exit(1);
     }
-  },
-);
+};
 
-export default mongoose;
+const shutdown = async (signal) => {
+    console.log(`${signal} received, shutting down gracefully`);
 
+    if (server) {
+        await new Promise((resolve, reject) => {
+            server.close((error) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
 
+                resolve();
+            });
+        });
+    }
+
+    await mongoose.disconnect();
+    process.exit(0);
+};
+
+process.on('SIGINT', () => {
+    shutdown('SIGINT').catch((error) => {
+        console.error('Error during shutdown:', error.message);
+        process.exit(1);
+    });
+});
+
+process.on('SIGTERM', () => {
+    shutdown('SIGTERM').catch((error) => {
+        console.error('Error during shutdown:', error.message);
+        process.exit(1);
+    });
+});
+
+process.on('unhandledRejection', (error) => {
+    console.error('Unhandled promise rejection:', error);
+});
+
+startServer();
